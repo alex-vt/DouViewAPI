@@ -14,22 +14,55 @@ import java.util.logging.Logger;
  */
 public class DouFetcher {
 
-    public static final String[] SUBFORUMS = {"all", "new", "support", "baraholka",
+    public static final String[] SUBFORUMS = {"all", "latest", "support", "baraholka",
             "job-search", "work", "city-job", "emigration", "misc", "development",
             "events", "startups", "learning", "freelance" };
     public static final String ALL_FORUMS = SUBFORUMS[0];
 
-    private static final String TOPICS_LIST_PAGE_URL_STRING_PREFIX = "http://dou.ua/forums/";
-    private static final String TOPICS_LIST_PAGE_URL_STRING_SUFFIX = "/page/";
+    private static final String DOU_PREFIX = "http://dou.ua/forums/";
+    private static final String DOU_TOPIC_STRING_PREFIX = "topic/";
+    private static final String DOU_TOPIC_LIST_SUFFIX = "/page/";
+
+    public static List<TopicHead> getTopicHeadList(int topicsCount, String subForum) throws Exception {
+        String forumUrlString = DOU_PREFIX + subForum + DOU_TOPIC_LIST_SUFFIX;
+        forumUrlString = forumUrlString.replace("/" + ALL_FORUMS, ""); // Converting the stub  /all/  into  /
+        List<TopicHead> topicHeadList = new ArrayList<TopicHead>();
+        int topicsPageCount = 0;
+        while (topicHeadList.size() < topicsCount) {
+            ++topicsPageCount;
+            Logger.getLogger("").info("Topics list page " + topicsPageCount + "...");
+            List<TopicHead> pageTopicHeadList = getTopicHeadListFromPage(forumUrlString + topicsPageCount);
+            while (pageTopicHeadList.size() > 0 && topicHeadList.size() < topicsCount) {
+                topicHeadList.add(pageTopicHeadList.remove(0));
+            }
+        }
+        Logger.getLogger("").info("Done.");
+        return topicHeadList;
+    }
+
+    public static Topic getTopic(int topicId) throws Exception {
+        return getTopic(DOU_PREFIX + DOU_TOPIC_STRING_PREFIX + topicId);
+    }
 
     public static List<Topic> getTopicList(int topicsCount, String subForum) throws Exception {
-        String forumUrlString = TOPICS_LIST_PAGE_URL_STRING_PREFIX + subForum + TOPICS_LIST_PAGE_URL_STRING_SUFFIX;
+        String forumUrlString = DOU_PREFIX + subForum + DOU_TOPIC_LIST_SUFFIX;
         forumUrlString = forumUrlString.replace("/" + ALL_FORUMS, ""); // Converting the stub  /all/  into  /
         List<String> topicUrlStringList = DouFetcher.getTopicUrlStringList(topicsCount, forumUrlString);
         return getTopicList(topicUrlStringList);
     }
 
-    public static List<String> getTopicUrlStringList(int topicsCount, String forumUrlString) throws Exception {
+    private static List<TopicHead> getTopicHeadListFromPage(String pageUrlString) throws Exception {
+        Node document = WebpageDataExtractor.loadDocument(pageUrlString, UserAgent.MOBILE);
+        NodeList topicsNodeList = getTopicHeadNodeList(document);
+        List<TopicHead> pageTopicHeadList = new ArrayList<TopicHead>();
+        for (int i = 0; i < topicsNodeList.getCount(); ++i) {
+            Node node = topicsNodeList.get(i);
+            pageTopicHeadList.add(getTopicHead(node));
+        }
+        return pageTopicHeadList;
+    }
+
+    private static List<String> getTopicUrlStringList(int topicsCount, String forumUrlString) throws Exception {
         List<String> topicUrlStringList = new ArrayList<String>();
         int topicsPageCount = 0;
         while (topicUrlStringList.size() < topicsCount) {
@@ -44,7 +77,7 @@ public class DouFetcher {
         return topicUrlStringList;
     }
 
-    public static List<Topic> getTopicList(List<String> topicUrlStringList) throws Exception {
+    private static List<Topic> getTopicList(List<String> topicUrlStringList) throws Exception {
         List<Topic> topicList = new ArrayList<Topic>();
         for (int i = 0; i < topicUrlStringList.size(); ++i) {
             Logger.getLogger("").info("Topic " + (i + 1) + " out of " + topicUrlStringList.size() + "...");
@@ -56,7 +89,7 @@ public class DouFetcher {
 
     private static List<String> getTopicUrlStringListFromPage(String pageUrlString) throws Exception {
         Node document = WebpageDataExtractor.loadDocument(pageUrlString, UserAgent.MOBILE);
-        NodeList topicsNodeList = getTopicNodeList(document);
+        NodeList topicsNodeList = getTopicHeadNodeList(document);
         List<String> pageTopicUrlStringList = new ArrayList<String>();
         for (int i = 0; i < topicsNodeList.getCount(); ++i) {
             Node node = topicsNodeList.get(i);
@@ -65,7 +98,7 @@ public class DouFetcher {
         return pageTopicUrlStringList;
     }
 
-    public static Topic getTopic(String topicUrlString) throws Exception {
+    private static Topic getTopic(String topicUrlString) throws Exception {
         Node document = WebpageDataExtractor.loadDocument(topicUrlString, UserAgent.MOBILE);
         return new Topic(
                 getTopicName(document),
@@ -95,11 +128,61 @@ public class DouFetcher {
         );
     }
 
-
-    private static NodeList getTopicNodeList(Node document) throws Exception {
+    private static NodeList getTopicHeadNodeList(Node document) throws Exception {
         return document
                 .evaluateXPathList("//article");
     }
+
+    private static TopicHead getTopicHead(Node topicNode) {
+        return new TopicHead(
+                getTopicHeadName(topicNode),
+                new Author(getTopicHeadAuthorName(topicNode), getTopicHeadAuthorUrl(topicNode)),
+                getTopicHeadCreationTime(topicNode), getTopicLink(topicNode),
+                getTopicHeadCommentCount(topicNode)
+        );
+    }
+
+    private static String getTopicHeadName(Node topicNode) {
+        return topicNode
+                .getFirstChild("h2")
+                .getFirstChild("a").getTextContent();
+    }
+
+    private static String getTopicHeadAuthorName(Node topicNode) {
+        return topicNode
+                .getFirstChild("div")
+                .getFirstChild("a").getTextContent();
+    }
+
+    private static String getTopicHeadAuthorUrl(Node topicNode) {
+        return topicNode
+                .getFirstChild("div")
+                .getFirstChild("a").getAttributeValue(0);
+    }
+
+    private static String getTopicHeadCreationTime(Node topicNode) {
+        return topicNode
+                .getFirstChild("div")
+                .getFirstChild("time").getTextContent();
+    }
+
+    private static String getTopicLink(Node topicNode) {
+        return topicNode
+                .getFirstChild("h2")
+                .getFirstChild("a").getAttributeValue(0);
+    }
+
+    private static int getTopicHeadCommentCount(Node topicNode) {
+        if (topicNode
+                .getFirstChild("h2")
+                .isChildExisting("a", 1)) {
+            return topicNode
+                    .getFirstChild("h2")
+                    .getChild("a", 1).getFirstIntFromContent();
+        }
+        return 0;
+    }
+
 
     private static String getTopicMessage(Node document) throws Exception {
         return document
@@ -135,12 +218,6 @@ public class DouFetcher {
     private static String getTopicAuthorUrl(Node document) throws Exception {
         return document
                 .evaluateXPath("//div[starts-with(@class, 'name')]")
-                .getFirstChild("a").getAttributeValue(0);
-    }
-
-    private static String getTopicLink(Node topicNode) {
-        return topicNode
-                .getFirstChild("h2")
                 .getFirstChild("a").getAttributeValue(0);
     }
 

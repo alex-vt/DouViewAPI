@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Comment implements Serializable {
     @Id
     private String id;
-    private long timestamp;
+    private long accessTimestamp;
 
     private Author author;
     private String answerTo;
@@ -33,8 +33,8 @@ public class Comment implements Serializable {
         this.likesCount = likesCount;
         this.creationTime = creationTime;
         this.douUrl = douUrl;
-        timestamp = System.currentTimeMillis();
-        id = timestamp + "_" + douUrl;
+        accessTimestamp = System.currentTimeMillis();
+        id = accessTimestamp + "_" + douUrl;
     }
 
     public Comment() { }
@@ -58,12 +58,12 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public long getAccessTimestamp() {
+        return accessTimestamp;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setAccessTimestamp(long accessTimestamp) {
+        this.accessTimestamp = accessTimestamp;
     }
 
     public Author getAuthor() {

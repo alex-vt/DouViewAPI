@@ -11,46 +11,39 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Forum topic data representation.
+ * Forum topic head (from the topic list) data representation.
  */
 @Entity
 @Index
 @XmlRootElement
-public class Topic implements Serializable {
+public class TopicHead implements Serializable {
     @Id
     private String id;
     private long accessTimestamp;
     private String douUrl;
-    private List<Comment> comments;
     private String name;
     private Author author;
-    private String body;
     private String creationTime;
-    private int douViewsCount;
+    private int commentCount;
 
-    public Topic() {}
+    public TopicHead() {}
 
-    public Topic(String name, Author author, String body, String creationTime, List<Comment> comments,
-                 int douViewsCount, String douUrl) {
+    public TopicHead(String name, Author author, String creationTime,
+                     String douUrl, int commentCount) {
         this.name = name;
         this.author = author;
-        this.body = body;
         this.creationTime = creationTime;
-        this.comments = comments;
-        this.douViewsCount = douViewsCount;
         this.douUrl = douUrl;
+        this.commentCount = commentCount;
         accessTimestamp = System.currentTimeMillis();
         id = accessTimestamp + "_" + douUrl;
     }
 
     public String toString() {
-        String string = "Topic:\n" + getName();
+        String string = "Topic head:\n" + getName();
         string += "\nBy " + getAuthor().toString();
-        string += "\n" + getBody();
         string += "\nTime: " + getCreationTime();
         string += ", link: " + getDouUrl();
-        string += "\nComments: " + getComments().size();
-        string += "\nViews: " + getDouViewsCount();
         return string + "\n";
     }
 
@@ -78,10 +71,6 @@ public class Topic implements Serializable {
         this.accessTimestamp = accessTimestamp;
     }
 
-    public int getCommentCount() {
-        return getComments().size();
-    }
-
     public String getName() {
         return name;
     }
@@ -98,14 +87,6 @@ public class Topic implements Serializable {
         this.author = author;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
     public String getCreationTime() {
         return creationTime;
     }
@@ -114,22 +95,12 @@ public class Topic implements Serializable {
         this.creationTime = creationTime;
     }
 
-    @XmlElement(name="comment", type=Comment.class)
-    @XmlElementWrapper(name="comments")
-    public List<Comment> getComments() {
-        return comments;
+    public int getCommentCount() {
+        return commentCount;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public int getDouViewsCount() {
-        return douViewsCount;
-    }
-
-    public void setDouViewsCount(int douViewsCount) {
-        this.douViewsCount = douViewsCount;
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 
 }

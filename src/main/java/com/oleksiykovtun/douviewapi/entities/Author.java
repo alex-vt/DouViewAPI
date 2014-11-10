@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Author implements Serializable {
     @Id
     private String id;
-    private long timestamp;
+    private long accessTimestamp;
     private String douUrl;
 
     private String name;
@@ -22,8 +22,8 @@ public class Author implements Serializable {
     public Author(String name, String douUrl) {
         this.name = name;
         this.douUrl = douUrl;
-        timestamp = System.currentTimeMillis();
-        id = timestamp + "_" + douUrl;
+        accessTimestamp = System.currentTimeMillis();
+        id = accessTimestamp + "_" + douUrl;
     }
 
     public Author() { }
@@ -43,12 +43,12 @@ public class Author implements Serializable {
         this.id = id;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public long getAccessTimestamp() {
+        return accessTimestamp;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setAccessTimestamp(long accessTimestamp) {
+        this.accessTimestamp = accessTimestamp;
     }
 
     public String getName() {
