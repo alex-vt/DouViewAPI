@@ -1,4 +1,4 @@
-package com.oleksiykovtun.douview.server.webpagedataextractor;
+package com.oleksiykovtun.webpagedataextractor;
 
 /**
  *  User agents for HTTP requests.

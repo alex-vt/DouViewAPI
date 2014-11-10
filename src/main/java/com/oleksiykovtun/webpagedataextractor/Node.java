@@ -1,4 +1,4 @@
-package com.oleksiykovtun.douview.server.webpagedataextractor;
+package com.oleksiykovtun.webpagedataextractor;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;

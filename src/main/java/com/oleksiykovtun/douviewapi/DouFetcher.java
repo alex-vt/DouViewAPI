@@ -1,13 +1,10 @@
-package com.oleksiykovtun.douview.server;
+package com.oleksiykovtun.douviewapi;
 
-import com.oleksiykovtun.douview.server.webpagedataextractor.Node;
-import com.oleksiykovtun.douview.server.webpagedataextractor.NodeList;
-import com.oleksiykovtun.douview.server.webpagedataextractor.UserAgent;
-import com.oleksiykovtun.douview.server.webpagedataextractor.WebpageDataExtractor;
-import com.oleksiykovtun.douview.shared.entities.Author;
-import com.oleksiykovtun.douview.shared.entities.Comment;
-import com.oleksiykovtun.douview.shared.entities.Topic;
-
+import com.oleksiykovtun.webpagedataextractor.Node;
+import com.oleksiykovtun.webpagedataextractor.NodeList;
+import com.oleksiykovtun.webpagedataextractor.UserAgent;
+import com.oleksiykovtun.webpagedataextractor.WebpageDataExtractor;
+import com.oleksiykovtun.douviewapi.entities.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;

@@ -1,4 +1,4 @@
-package com.oleksiykovtun.douview.server;
+package com.oleksiykovtun.douviewapi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.googlecode.objectify.ObjectifyService;
-import com.oleksiykovtun.douview.shared.entities.*;
+import com.oleksiykovtun.douviewapi.entities.*;
 import java.util.logging.Logger;
 
 /**

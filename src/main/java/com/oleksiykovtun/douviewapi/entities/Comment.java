@@ -1,4 +1,4 @@
-package com.oleksiykovtun.douview.shared.entities;
+package com.oleksiykovtun.douviewapi.entities;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

@@ -18,7 +18,7 @@
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.oleksiykovtun.douview.server</param-value>
+            <param-value>com.oleksiykovtun.douviewapi</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -26,9 +26,5 @@
         <servlet-name>JerseyServlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
 
 </web-app>
