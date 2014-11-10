@@ -14,10 +14,22 @@ import java.util.logging.Logger;
  */
 public class DouFetcher {
 
-    private static final String topicsListPageUrlStringPrefix = "http://dou.ua/forums/page/";
+    public static final String[] SUBFORUMS = {"all", "new", "support", "baraholka",
+            "job-search", "work", "city-job", "emigration", "misc", "development",
+            "events", "startups", "learning", "freelance" };
+    public static final String ALL_FORUMS = SUBFORUMS[0];
 
+    private static final String TOPICS_LIST_PAGE_URL_STRING_PREFIX = "http://dou.ua/forums/";
+    private static final String TOPICS_LIST_PAGE_URL_STRING_SUFFIX = "/page/";
 
-    public static List<String> getTopicUrlStringList(String forumUrlString, int topicsCount) throws Exception {
+    public static List<Topic> getTopicList(int topicsCount, String subForum) throws Exception {
+        String forumUrlString = TOPICS_LIST_PAGE_URL_STRING_PREFIX + subForum + TOPICS_LIST_PAGE_URL_STRING_SUFFIX;
+        forumUrlString = forumUrlString.replace("/" + ALL_FORUMS, ""); // Converting the stub  /all/  into  /
+        List<String> topicUrlStringList = DouFetcher.getTopicUrlStringList(topicsCount, forumUrlString);
+        return getTopicList(topicUrlStringList);
+    }
+
+    public static List<String> getTopicUrlStringList(int topicsCount, String forumUrlString) throws Exception {
         List<String> topicUrlStringList = new ArrayList<String>();
         int topicsPageCount = 0;
         while (topicUrlStringList.size() < topicsCount) {
@@ -30,11 +42,6 @@ public class DouFetcher {
         }
         Logger.getLogger("").info("Done.");
         return topicUrlStringList;
-    }
-
-    public static List<Topic> getTopicList(int topicsCount) throws Exception {
-        List<String> topicUrlStringList = DouFetcher.getTopicUrlStringList(topicsListPageUrlStringPrefix, topicsCount);
-        return getTopicList(topicUrlStringList);
     }
 
     public static List<Topic> getTopicList(List<String> topicUrlStringList) throws Exception {

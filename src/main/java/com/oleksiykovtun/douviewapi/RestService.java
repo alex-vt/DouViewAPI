@@ -1,6 +1,7 @@
 package com.oleksiykovtun.douviewapi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -44,19 +45,29 @@ public class RestService {
     @Path("/direct/{n}-topics")
     @Produces(MediaType.TEXT_XML)
     public List<Topic> getTopicsDirectly(@PathParam("n") int topicsCount) {
-        List<Topic> topicList = null;
-        long processingTimeMillis = System.currentTimeMillis();
-        Logger.getLogger("").info("Request processing started...");
-        try {
-            topicList = DouFetcher.getTopicList(topicsCount);
-            Logger.getLogger("").info("Saving to DB...");
-            ObjectifyService.ofy().save().entities(topicList).now();
-        } catch (Throwable e) {
-            Logger.getLogger("").log(Level.SEVERE, "Request failed!", e);
+        return getTopicsDirectly(DouFetcher.ALL_FORUMS, topicsCount);
+    }
+
+    @GET
+    @Path("/direct/{subforum}/{n}-topics")
+    @Produces(MediaType.TEXT_XML)
+    public List<Topic> getTopicsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
+        if (Arrays.asList(DouFetcher.SUBFORUMS).contains(subForum)) {
+            List<Topic> topicList = null;
+            long processingTimeMillis = System.currentTimeMillis();
+            Logger.getLogger("").info("Request processing started...");
+            try {
+                topicList = DouFetcher.getTopicList(topicsCount, subForum);
+                Logger.getLogger("").info("Saving to DB...");
+                ObjectifyService.ofy().save().entities(topicList).now();
+            } catch (Throwable e) {
+                Logger.getLogger("").log(Level.SEVERE, "Request failed!", e);
+            }
+            processingTimeMillis = System.currentTimeMillis() - processingTimeMillis;
+            Logger.getLogger("").info("Done in " + processingTimeMillis / 1000 + " s.");
+            return topicList;
         }
-        processingTimeMillis = System.currentTimeMillis() - processingTimeMillis;
-        Logger.getLogger("").info("Done in " + processingTimeMillis / 1000 + " s.");
-        return topicList;
+        return null;
     }
 
     @DELETE
