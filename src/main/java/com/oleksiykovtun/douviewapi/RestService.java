@@ -55,8 +55,8 @@ public class RestService {
     @Path("/direct/{subforum}/{n}-topic-heads")
     @Produces(JSON)
     public List<TopicHead> getTopicHeadsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
+        List<TopicHead> topicHeadList = null;
         if (Arrays.asList(DouFetcher.SUBFORUMS).contains(subForum)) {
-            List<TopicHead> topicHeadList = null;
             long processingTimeMillis = System.currentTimeMillis();
             Logger.getLogger("").info("Request processing started...");
             try {
@@ -66,9 +66,8 @@ public class RestService {
             }
             processingTimeMillis = System.currentTimeMillis() - processingTimeMillis;
             Logger.getLogger("").info("Done in " + processingTimeMillis / 1000 + " s.");
-            return topicHeadList;
         }
-        return null;
+        return topicHeadList;
     }
 
     @GET
@@ -82,8 +81,8 @@ public class RestService {
     @Path("/direct/{subforum}/{n}-topics")
     @Produces(JSON)
     public List<Topic> getTopicsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
+        List<Topic> topicList = null;
         if (Arrays.asList(DouFetcher.SUBFORUMS).contains(subForum)) {
-            List<Topic> topicList = null;
             long processingTimeMillis = System.currentTimeMillis();
             Logger.getLogger("").info("Request processing started...");
             try {
@@ -95,9 +94,8 @@ public class RestService {
             }
             processingTimeMillis = System.currentTimeMillis() - processingTimeMillis;
             Logger.getLogger("").info("Done in " + processingTimeMillis / 1000 + " s.");
-            return topicList;
         }
-        return null;
+        return topicList;
     }
 
     @DELETE
