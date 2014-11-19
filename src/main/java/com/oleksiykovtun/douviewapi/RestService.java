@@ -71,6 +71,25 @@ public class RestService {
     }
 
     @GET
+    @Path("/direct/topic/{id}")
+    @Produces(JSON)
+    public Topic getTopicDirectly(@PathParam("id") int topicId) {
+        Topic topic = null;
+        long processingTimeMillis = System.currentTimeMillis();
+        Logger.getLogger("").info("Request processing started...");
+        try {
+            topic = DouFetcher.getTopic(topicId);
+            Logger.getLogger("").info("Saving to DB...");
+            ObjectifyService.ofy().save().entity(topic).now();
+        } catch (Throwable e) {
+            Logger.getLogger("").log(Level.SEVERE, "Request failed!", e);
+        }
+        processingTimeMillis = System.currentTimeMillis() - processingTimeMillis;
+        Logger.getLogger("").info("Done in " + processingTimeMillis / 1000 + " s.");
+        return topic;
+    }
+
+    @GET
     @Path("/direct/{n}-topics")
     @Produces(JSON)
     public List<Topic> getTopicsDirectly(@PathParam("n") int topicsCount) {
