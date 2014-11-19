@@ -4,7 +4,7 @@ The REST API for viewing data from DOU.ua forums.
 
 ###Usage
 
-This REST service produces text/xml.
+This REST service produces application/json.
 
 To get 5 topics recently cached by the service, perform a GET request:
 

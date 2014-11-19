@@ -18,6 +18,9 @@ import java.util.logging.Logger;
 @Path("/")
 public class RestService {
 
+    private static final String CHARSET_UTF_8 = ";charset=utf-8";
+    private static final String JSON = MediaType.APPLICATION_JSON + CHARSET_UTF_8;
+
     static {
         ObjectifyService.register(Author.class);
         ObjectifyService.register(Comment.class);
@@ -26,7 +29,7 @@ public class RestService {
 
     @GET
     @Path("/cache/{n}-recent-topics")
-    @Produces(MediaType.TEXT_XML)
+    @Produces(JSON)
     public List<Topic> getTopicsFromDb(@PathParam("n") int topicsCount) {
         List<Topic> topicList = null;
         Logger.getLogger("").info("Request processing started...");
@@ -43,14 +46,14 @@ public class RestService {
 
     @GET
     @Path("/direct/{n}-topic-heads")
-    @Produces(MediaType.TEXT_XML)
+    @Produces(JSON)
     public List<TopicHead> getTopicHeadsDirectly(@PathParam("n") int topicsCount) {
         return getTopicHeadsDirectly(DouFetcher.ALL_FORUMS, topicsCount);
     }
 
     @GET
     @Path("/direct/{subforum}/{n}-topic-heads")
-    @Produces(MediaType.TEXT_XML)
+    @Produces(JSON)
     public List<TopicHead> getTopicHeadsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
         if (Arrays.asList(DouFetcher.SUBFORUMS).contains(subForum)) {
             List<TopicHead> topicHeadList = null;
@@ -70,14 +73,14 @@ public class RestService {
 
     @GET
     @Path("/direct/{n}-topics")
-    @Produces(MediaType.TEXT_XML)
+    @Produces(JSON)
     public List<Topic> getTopicsDirectly(@PathParam("n") int topicsCount) {
         return getTopicsDirectly(DouFetcher.ALL_FORUMS, topicsCount);
     }
 
     @GET
     @Path("/direct/{subforum}/{n}-topics")
-    @Produces(MediaType.TEXT_XML)
+    @Produces(JSON)
     public List<Topic> getTopicsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
         if (Arrays.asList(DouFetcher.SUBFORUMS).contains(subForum)) {
             List<Topic> topicList = null;
