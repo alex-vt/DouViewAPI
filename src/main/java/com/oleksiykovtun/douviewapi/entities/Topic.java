@@ -114,8 +114,7 @@ public class Topic implements Serializable {
         this.creationTime = creationTime;
     }
 
-    @XmlElement(name="comment", type=Comment.class)
-    @XmlElementWrapper(name="comments")
+    @XmlElement(name="comments", type=Comment.class)
     public List<Comment> getComments() {
         return comments;
     }
