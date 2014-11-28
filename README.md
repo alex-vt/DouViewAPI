@@ -8,15 +8,15 @@ This REST service produces application/json.
 
 To get 5 topics recently cached by the service, perform a GET request:
 
-	http://dou-view-api.appspot.com/cache/5-recent-topics
+	http://dou-view-api.appspot.com/cache/forums/5-recent-topics
 
-To get directly from DOU.ua and cache 3 recently active topics, perform a GET request:
+To get directly from DOU.ua and to cache 3 recently active topics, perform a GET request:
 
-	http://dou-view-api.appspot.com/direct/3-topics
+	http://dou-view-api.appspot.com/forums/3-topics
 
 To clear the cache, perform a DELETE request:
 
-	http://dou-view-api.appspot.com/cache/clear
+	http://dou-view-api.appspot.com/cache/forums/clear
 
 
 ###Running the service at local port 8181

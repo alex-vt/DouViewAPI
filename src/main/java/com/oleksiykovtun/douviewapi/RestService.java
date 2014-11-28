@@ -28,7 +28,7 @@ public class RestService {
     }
 
     @GET
-    @Path("/cache/{n}-recent-topics")
+    @Path("/cache/forums/{n}-recent-topics")
     @Produces(JSON)
     public List<Topic> getTopicsFromDb(@PathParam("n") int topicsCount) {
         List<Topic> topicList = null;
@@ -45,14 +45,14 @@ public class RestService {
     }
 
     @GET
-    @Path("/direct/{n}-topic-heads")
+    @Path("/forums/{n}-topic-heads")
     @Produces(JSON)
     public List<TopicHead> getTopicHeadsDirectly(@PathParam("n") int topicsCount) {
         return getTopicHeadsDirectly(DouFetcher.ALL_FORUMS, topicsCount);
     }
 
     @GET
-    @Path("/direct/{subforum}/{n}-topic-heads")
+    @Path("/forums/{subforum}/{n}-topic-heads")
     @Produces(JSON)
     public List<TopicHead> getTopicHeadsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
         List<TopicHead> topicHeadList = null;
@@ -71,7 +71,7 @@ public class RestService {
     }
 
     @GET
-    @Path("/direct/topic/{id}")
+    @Path("/forums/topic/{id}")
     @Produces(JSON)
     public Topic getTopicDirectly(@PathParam("id") int topicId) {
         Topic topic = null;
@@ -90,14 +90,14 @@ public class RestService {
     }
 
     @GET
-    @Path("/direct/{n}-topics")
+    @Path("/forums/{n}-topics")
     @Produces(JSON)
     public List<Topic> getTopicsDirectly(@PathParam("n") int topicsCount) {
         return getTopicsDirectly(DouFetcher.ALL_FORUMS, topicsCount);
     }
 
     @GET
-    @Path("/direct/{subforum}/{n}-topics")
+    @Path("/forums/{subforum}/{n}-topics")
     @Produces(JSON)
     public List<Topic> getTopicsDirectly(@PathParam("subforum") String subForum, @PathParam("n") int topicsCount) {
         List<Topic> topicList = null;
@@ -118,7 +118,7 @@ public class RestService {
     }
 
     @DELETE
-    @Path("/cache/clear")
+    @Path("/cache/forums/clear")
     public void deleteData() {
         Logger.getLogger("").info("Request processing started...");
         try {
