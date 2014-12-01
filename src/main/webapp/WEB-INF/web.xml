@@ -18,7 +18,7 @@
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.oleksiykovtun.douviewapi</param-value>
+            <param-value>com.oleksiykovtun.douviewapi;org.codehaus.jackson.jaxrs</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
