@@ -173,14 +173,20 @@ public class DouFetcher {
     }
 
     private static int getTopicHeadCommentCount(Node topicNode) {
+        int commentCount = 0;
         if (topicNode
                 .getFirstChild("h2")
                 .isChildExisting("a", 1)) {
-            return topicNode
+            commentCount = topicNode
                     .getFirstChild("h2")
                     .getChild("a", 1).getFirstIntFromContent();
+            if (topicNode
+                    .getFirstChild("h2")
+                    .getChild("a", 1).getTextContent().contains("K")) {
+                commentCount *= 1000;
+            }
         }
-        return 0;
+        return commentCount;
     }
 
 
