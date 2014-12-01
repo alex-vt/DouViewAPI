@@ -157,7 +157,7 @@ public class DouFetcher {
     private static String getTopicHeadAuthorUrl(Node topicNode) {
         return topicNode
                 .getFirstChild("div")
-                .getFirstChild("a").getAttributeValue(0);
+                .getFirstChild("a").getAttributeValue(1);
     }
 
     private static String getTopicHeadCreationTime(Node topicNode) {
